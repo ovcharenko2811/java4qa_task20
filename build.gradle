@@ -1,22 +1,51 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '4.1.0'
 }
 
 group = 'com.alpha.training'
 version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_24
+    targetCompatibility = JavaVersion.VERSION_24
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
+    // JUnit 5
+    testImplementation platform('org.junit:junit-bom:5.11.4')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation("io.qameta.allure:allure-maven:3.0.3")
-    testImplementation("io.qameta.allure:allure-maven:3.0.3")
+
+    // Allure JUnit 5
+    testImplementation 'io.qameta.allure:allure-junit5:2.29.0'
 }
 
 test {
     useJUnitPlatform()
+}
+
+allure {
+    version = '2.29.0'
+
+    adapter {
+        aspectjWeaver = true
+        frameworks {
+            junit5 {
+                enabled = true
+            }
+        }
+    }
+
+    report {
+        version = '2.29.0'
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }
